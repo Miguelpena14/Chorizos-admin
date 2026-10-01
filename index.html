@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#8b1e16"><meta name="description" content="Control de inventario, lotes, clientes, pedidos y pagos para venta de chorizos.">
+  <link rel="manifest" href="manifest.json"><link rel="stylesheet" href="styles.css">
+  <title>Chorizos | Panel de ventas</title>
+</head>
+<body>
+<header class="topbar"><div><p class="eyebrow">ADMINISTRACIÓN</p><h1>🌭 Chorizos</h1><p class="sub">Inventario, lotes y clientes</p></div><div class="lot-control"><label for="lotSelect">Lote activo</label><select id="lotSelect"></select><button id="newLotBtn" class="button light">＋ Nuevo lote</button></div></header>
+<main class="container">
+  <section class="stats" aria-label="Resumen del lote">
+    <article class="stat"><span>Clientes del lote</span><strong id="statClients">0</strong></article>
+    <article class="stat"><span>Ventas del lote</span><strong id="statSales">$0</strong></article>
+    <article class="stat"><span>Por cobrar</span><strong id="statDebt">$0</strong></article>
+    <article class="stat"><span>Pedidos por entregar</span><strong id="statPending">0</strong></article>
+  </section>
+  <nav class="tabs" aria-label="Secciones"><button class="tab active" data-view="ordersView">Clientes y pedidos</button><button class="tab" data-view="inventoryView">Inventario</button><button class="tab" data-view="historyView">Historial de lotes</button></nav>
+  <section id="ordersView" class="view">
+    <div class="section-heading"><div><h2>Clientes del lote</h2><p>Los pedidos descuentan el inventario automáticamente.</p></div><button id="addClientBtn" class="button primary">＋ Agregar cliente</button></div>
+    <div class="filters"><input id="clientSearch" type="search" placeholder="Buscar cliente…" aria-label="Buscar cliente"><select id="deliveryFilter" aria-label="Filtrar entrega"><option value="all">Todas las entregas</option><option value="pending">Pendiente por entregar</option><option value="delivered">Entregado</option></select><select id="paymentFilter" aria-label="Filtrar pago"><option value="all">Todos los pagos</option><option value="debe">Debe</option><option value="paid">Pagado</option></select></div>
+    <div id="clientsList" class="clients-list"></div>
+  </section>
+  <section id="inventoryView" class="view hidden">
+    <div class="section-heading"><div><h2>Inventario disponible</h2><p>Existencias actuales en packs.</p></div></div>
+    <div class="inventory-grid">
+      <article class="inventory-card"><div class="pack-icon">🌭🌭🌭🌭🌭</div><h3>Pack x5</h3><p class="price">$17.000 <small>/ pack</small></p><strong id="stock5" class="stock-number">0</strong><span class="muted">packs disponibles</span><div class="stock-actions"><input id="qty5" type="number" min="1" step="1" value="1" aria-label="Cantidad de packs x5"><button class="button primary" data-stock="5" data-action="add">Agregar</button><button class="button danger-outline" data-stock="5" data-action="remove">Retirar</button></div></article>
+      <article class="inventory-card"><div class="pack-icon">🌭🌭🌭🌭🌭🌭🌭</div><h3>Pack x7</h3><p class="price">$22.000 <small>/ pack</small></p><strong id="stock7" class="stock-number">0</strong><span class="muted">packs disponibles</span><div class="stock-actions"><input id="qty7" type="number" min="1" step="1" value="1" aria-label="Cantidad de packs x7"><button class="button primary" data-stock="7" data-action="add">Agregar</button><button class="button danger-outline" data-stock="7" data-action="remove">Retirar</button></div></article>
+    </div><p class="notice">El inventario es compartido entre todos los lotes. Los pedidos anteriores se conservan en el historial.</p>
+  </section>
+  <section id="historyView" class="view hidden"><div class="section-heading"><div><h2>Historial de lotes</h2><p>Consulta las ventas y clientes de lotes anteriores.</p></div></div><div id="lotsList" class="lots-list"></div></section>
+</main>
+<dialog id="clientDialog"><form id="clientForm" method="dialog"><div class="dialog-heading"><div><h2 id="clientDialogTitle">Agregar cliente</h2><p>Los packs se descuentan al guardar.</p></div><button type="button" class="icon-button" id="closeClient" aria-label="Cerrar">✕</button></div><input type="hidden" id="clientId"><label for="clientName">Nombre del cliente</label><input id="clientName" maxlength="100" required placeholder="Ej. María Pérez"><div class="quantity-fields"><div><label for="orderQty5">Packs x5 ($17.000)</label><input id="orderQty5" type="number" min="0" step="1" value="0" required></div><div><label for="orderQty7">Packs x7 ($22.000)</label><input id="orderQty7" type="number" min="0" step="1" value="0" required></div></div><div class="total-box"><span>Total del pedido</span><strong id="orderTotal">$0</strong></div><p id="stockHint" class="muted"></p><div class="dialog-actions"><button type="button" class="button light" id="cancelClient">Cancelar</button><button type="submit" class="button primary">Guardar pedido</button></div></form></dialog>
+<div id="toast" class="toast" role="status" aria-live="polite"></div><footer>Chorizos · Sistema local de ventas</footer>
+<script src="app.js" defer></script>
+</body></html>
